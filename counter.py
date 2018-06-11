@@ -20,7 +20,11 @@ def motion(pir_pin):
     filename = datetime.strftime(datetime.now(),'%Y-%m-%d-%H-%M-%S')
     piclocation = '/home/pi/Pictures/'+ filename + '.jpg'
     time.sleep(1)
+    camera.start_preview()
+    time.sleep(2)
     camera.capture(piclocation)
+    time.sleep(3)
+    camera.stop_preview()
         
 
 print("PIR Module test")
