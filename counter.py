@@ -11,14 +11,13 @@ io.setup(pir_pin, io.IN)
 #camera settings
 camera = PiCamera()
 camera.exposure_mode = 'auto'
-camera.image_effect='blur'
 camera.resolution = (400, 300)
 camera.awb_mode = 'auto'
 
 def motion(pir_pin):
     print("Motion!")
-    filename = datetime.strftime(datetime.now(),'%Y-%m-%d-%H-%M-%S')
-    piclocation = '/home/pi/Pictures/'+ filename + '.jpg'
+    filename = 'counter_image.jpg'
+    piclocation = '/home/pi/Pictures/'+ filename
     time.sleep(1)
     camera.start_preview()
     time.sleep(2)
