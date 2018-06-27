@@ -2,6 +2,7 @@ import RPi.GPIO as io
 import time
 from picamera import PiCamera
 from datetime import datetime
+import ..tensorflow_trained_models.trail_counter_obj_detect.py
 
 #PIR setup
 pir_pin = 17
@@ -17,14 +18,14 @@ camera.awb_mode = 'auto'
 def motion(pir_pin):
     print("Motion!")
     filename = 'counter_image.jpg'
-    piclocation = '/home/pi/Pictures/'+ filename
-    time.sleep(1)
-    camera.start_preview()
-    time.sleep(2)
+    piclocation = '/home/pi/Public/'+ filename
+    # time.sleep(1)
+    # camera.start_preview()
+    # time.sleep(2)
     camera.capture(piclocation)
     time.sleep(3)
-    camera.stop_preview()
-        
+    # camera.stop_preview()
+
 
 print("PIR Module test")
 time.sleep(2)
