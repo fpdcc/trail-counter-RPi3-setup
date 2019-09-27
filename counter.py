@@ -27,7 +27,7 @@ def motion(pir_pin):
 
 
 # print("PIR Module test")
-time.sleep(2)
+# time.sleep(2)
 # print("Ready")
 
 while True:
