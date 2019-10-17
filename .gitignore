@@ -1,3 +1,5 @@
 /trail-counter
+.vscode
 *.ipynb
 .ipynb_checkpoints
+config.yaml
