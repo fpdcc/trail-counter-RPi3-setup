@@ -17,7 +17,12 @@ Other things to help development or in constructing the sensor - these are not n
 
 # Trail Counter
 ### Step 1
-run `rasp_pi_installs.sh` to install all software
+
+```
+git clone https://github.com/fpdcc/trail-counter-RPi3-setup.git
+cd trail-counter-RPi3-setup
+./rasp_pi_installs.sh
+```bash
 
 ### Test installations
 	todo
