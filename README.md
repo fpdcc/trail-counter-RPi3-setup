@@ -1,39 +1,45 @@
 R Pi 3 set up help for trail counter.
 
 # Items needed for counter:
-* Raspberry Pi (We've tested this on model 3 B)
-* SD with Raspian Jesse installed
+* Raspberry Pi (We've tested this on model 3 B - with headers)
+* SD with Raspian Buster installed
 * PIR sensor
 * Pi Camera
 * Huawei E303 Cellualar USB dongle with Sim card (we got both from Hologram.io)
 * External Battery (Currently we are using a 14000 mAh batery)
 
-Other things to help development but may or may not be neccessary
+Other things to help development or in constructing the sensor - these are not neccessary
 * HDMI cable
 * Adafruit T-cobbler w/ serial cable
 * Bread board
-
-# How to connect to Raspberry Pi
-SSH
-
-???
-
+* 12in camera cable
+* female to female wires
 
 # Trail Counter
 ### Step 1
 run `rasp_pi_installs.sh` to install all software
 
 ### Test installations
-???
-
-???
-
-???
+	todo
 
 ### Step 2
 Connect external sensors/devices
 
-???
+Connect PIR sensor
+ 1. GND on sensor to a ground pinon the pi.
+ 2. 5v pin to 5v pin on pi.
+ 3. out pin to xxx pin on pi.
+
+Allow camera
+```sudo raspi-config```
+
+select
+ > Interface options
+   > Camera
+     > YES
+
+Connect Raspberry Pi Camera Rev 1.3 
+ 1.Ribbon cable from camera goes into slot labeled camera on pi.
 
 ### Step 3
 Create systemd service to run on boot
@@ -41,6 +47,8 @@ Create systemd service to run on boot
 ```bash
 sudo nano /lib/systemd/system/trail_counter.service
 ```
+Copy and paste into file
+
 ```
  [Unit]
  Description=Start trail counter service
@@ -53,7 +61,9 @@ sudo nano /lib/systemd/system/trail_counter.service
 
  [Install]
  WantedBy=multi-user.target
+
 ```
+
 Exit nano
 
 `ctrl+X` and `y` to save
@@ -69,6 +79,8 @@ Reboot to start service
 To check status of service use these tools
 `top` or `htop`
 
+Look for something called trailcounter.service
+
 also
 
 ```bash
@@ -80,7 +92,6 @@ sudo journalctl -f -u trail_counter.service
 ### To switch raspberry pi to headless (non-GUI) mode use:
 `sudo raspi-config`
 > Boot options
-
-> Desktop / CLI
+  > Desktop / CLI
 
 Then choose an option depending on your preference.
