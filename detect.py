@@ -23,6 +23,11 @@ import argparse
 import io
 import re
 import time
+import datetime
+import yaml
+import requests
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
 
 #from annotation import Annotator
 
@@ -103,6 +108,25 @@ def annotate_objects(results, labels):
     #annotator.text([xmin, ymin],
     print('%s %.2f' % (labels[obj['class_id']], obj['score']))
 
+def requests_retry_session(
+    retries=3,
+    backoff_factor=0.3,
+    status_forcelist=(500, 502, 504),
+    session=None,
+):
+    session = session or requests.Session()
+    retry = Retry(
+        total=retries,
+        read=retries,
+        connect=retries,
+        backoff_factor=backoff_factor,
+        status_forcelist=status_forcelist,
+        method_whitelist=('GET', 'POST')
+    )
+    adapter = HTTPAdapter(max_retries=retry)
+    session.mount('http://', adapter)
+    session.mount('https://', adapter)
+    return session
 
 def main():
   parser = argparse.ArgumentParser(
@@ -128,14 +152,53 @@ def main():
   interpreter.allocate_tensors()
   _, input_height, input_width, _ = interpreter.get_input_details()[0]['shape']
 
-  with Image.open(args.image).convert('RGB').resize(
-            (input_width, input_height), Image.ANTIALIAS) as f:
-        results = detect_objects(interpreter, f, args.threshold)
+  print("input_height: {}".format(input_height))
+  print("input_width: {}".format(input_width))
+
+  with Image.open(args.image).convert('RGB').resize((input_width, input_height), Image.ANTIALIAS) as f:
+      results = detect_objects(interpreter, f, args.threshold)
         #print(results)
        # annotator.clear()
-        annotate_objects(results, labels)
+      annotate_objects(results, labels)
        # annotator.text([5, 0])
        #  annotator.update()
+      detec = [category_index.get(value) for index,value in enumerate(classes[0]) if scores[0,index] > 0.90]
+       # print detec
+
+      bicycle = 0
+      person = 0
+      horse = 0
+
+      for d in detec:
+          if d['name'] == 'bicycle':
+              bicycle += 1
+          if d['name'] == 'person':
+              person += 1
+          if d['name'] == 'horse':
+              horse += 1
+
+
+       main_url = 'https://api.thingspeak.com/update?api_key=' + KEY
+       channel_id = CHANNELID
+       date = str(datetime.datetime.now())
+       payload = dict(field1=date, field3=bicycle, field4=person, field5=horse)
+
+       r = requests_retry_session().post(main_url, params=payload)
+
+       # for attempt in range (10):
+       #     try:
+       #         r = requests.post(main_url, params=payload)
+       #         # print r.url
+       #         # print 'payload sent'
+       #     except requests.exceptions.ConnectionError:
+       #         # print 'Connection Error'
+       #         pass
+       #     else:
+       #         break
+
+       # print 'bicycle =', (bicycle)
+       # print 'person =', (person)
+       # print 'horse =', (horse)
 
 
 if __name__ == '__main__':
