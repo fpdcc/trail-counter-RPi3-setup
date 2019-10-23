@@ -17,7 +17,7 @@ camera.awb_mode = 'auto'
 def motion(pir_pin):
     # print("Motion!")
     filename = 'counter_image.jpg'
-    piclocation = '/home/pi/Public/'+ filename
+    piclocation = '/home/pi/Public/images/'+ filename
     time.sleep(1)
     # camera.start_preview()
     # time.sleep(2)
@@ -37,7 +37,7 @@ while True:
         motion(pir_pin)
         time.sleep(2)
 	# print("executing object detection")
-	execfile("/home/pi/Public/tensorflow_trained_models/trail_counter_obj_detect.py")
+	execfile("/home/pi/Public/trail-counter-RPi3-setup/detect.py")
         # print ("rpi-ms-camera: Sleeping")
         # time.sleep(1)
     except KeyboardInterrupt:

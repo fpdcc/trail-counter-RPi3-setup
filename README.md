@@ -18,6 +18,10 @@ Other things to help development or in constructing the sensor - these are not n
 # Trail Counter
 ### Step 1
 
+```cd /home/pi/Public/```
+
+Then
+
 ```
 git clone https://github.com/fpdcc/trail-counter-RPi3-setup.git
 cd trail-counter-RPi3-setup
@@ -100,3 +104,19 @@ sudo journalctl -f -u trail_counter.service
   > Desktop / CLI
 
 Then choose an option depending on your preference.
+
+---
+
+# This section is not part of the set up for the Raspberry Pi
+
+## To run object detection with Tensorflow Lite on an image.
+
+* [detect.py was adapted from the original TensorFlow git repository](https://github.com/tensorflow/examples/tree/master/lite/examples/object_detection/raspberry_pi)
+
+```
+python3 detect.py \
+--model detect.tflite \
+--labels coco_labels.txt \
+--threshold 0.55 \
+--image /home/pi/Public/images/pedestrian.jpeg
+```
