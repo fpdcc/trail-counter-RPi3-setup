@@ -3,3 +3,4 @@
 *.ipynb
 .ipynb_checkpoints
 config.yaml
+/__pycache__

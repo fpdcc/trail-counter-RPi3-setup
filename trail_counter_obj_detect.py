@@ -3,9 +3,10 @@
 import numpy as np
 import os
 import sys
+import re
 import requests
 import datetime
-import yaml
+#import yaml
 from PIL import Image
 from tflite_runtime.interpreter import Interpreter
 
@@ -30,13 +31,28 @@ PATH_TO_IMAGE = os.path.join(IMG_DIR,IMG_NAME)
 # Path to label map file
 #PATH_TO_LABELS = os.path.join(CWD_PATH,MODEL_NAME,LABELMAP_NAME)
 
+
+with open(LABELMAP_NAME, 'r', encoding='utf-8') as f:
+    lines = f.readlines()
+    labels = {}
+    for row_number, content in enumerate(lines):
+      pair = re.split(r'[:\s]+', content.strip(), maxsplit=1)
+      if len(pair) == 2 and pair[0].strip().isdigit():
+        labels[int(pair[0])] = pair[1].strip()
+      else:
+        labels[row_number] = pair[0].strip()
+
+
+
 # Load the label map
-with open(LABELMAP_NAME, 'r') as f:
-    labels = [line.strip() for line in f.readlines()]
+#with open(LABELMAP_NAME, 'r') as f:
+#    labels = [line.strip() for line in f.readlines()]
 
 # If first label is '???', remove.
-if labels[0] == '???':
-    del(labels[0])
+#if labels[0] == '???':
+#    del(labels[0])
+
+#print(labels)
 
 # Load the Tensorflow Lite model and get details
 interpreter = Interpreter(model_path=MODEL_NAME)
@@ -115,7 +131,7 @@ for i in range(len(scores)):
     # if d['name'] == 'horse':
         # horse += 1
 
-
+image.close()
 # main_url = 'https://api.thingspeak.com/update?api_key=' + KEY
 # channel_id = CHANNELID
 # date = str(datetime.datetime.now())

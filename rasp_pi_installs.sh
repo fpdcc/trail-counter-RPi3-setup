@@ -6,7 +6,10 @@
 
 DATA_DIR="/home/pi/Public/trail-counter-RPi3-setup"
 
-# Get requirements file
+# Install Tensorflow Lite
+python3 -m pip install tflite_runtime-1.14.0-cp37-cp37m-linux_armv7l.whl
+
+# Get requirements for object detection with PiCamera
 curl -O https://raw.githubusercontent.com/tensorflow/examples/master/lite/examples/object_detection/raspberry_pi/requirements.txt
 
 # Install required packages
