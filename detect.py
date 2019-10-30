@@ -157,19 +157,19 @@ def main():
 
   with Image.open(args.image).convert('RGB').resize((input_width, input_height), Image.ANTIALIAS) as f:
       results = detect_objects(interpreter, f, args.threshold)
-        #print(results)
+       # print(results)
        # annotator.clear()
       annotate_objects(results, labels)
        # annotator.text([5, 0])
        #  annotator.update()
-      detec = [category_index.get(value) for index,value in enumerate(classes[0]) if scores[0,index] > 0.90]
-       # print detec
+      detect = [category_index.get(value) for index,value in enumerate(classes[0]) if scores[0,index] > 0.90]
+       # print detect
 
       bicycle = 0
       person = 0
       horse = 0
 
-      for d in detec:
+      for d in detect:
           if d['name'] == 'bicycle':
               bicycle += 1
           if d['name'] == 'person':
