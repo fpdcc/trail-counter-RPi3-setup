@@ -118,5 +118,5 @@ python3 detect.py \
 --model detect.tflite \
 --labels coco_labels.txt \
 --threshold 0.55 \
---image /home/pi/Public/images/pedestrian.jpeg
+--image /home/pi/Public/images/counter_image.jpg
 ```
