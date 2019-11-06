@@ -28,17 +28,16 @@ import yaml
 import requests
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
-
-#from annotation import Annotator
-
 import numpy as np
-#import picamera
-
 from PIL import Image
 from tflite_runtime.interpreter import Interpreter
 
 CAMERA_WIDTH = 640
 CAMERA_HEIGHT = 480
+
+config = yaml.safe_load(open("/home/pi/Public/trail-counter-RPi3-setup/config.yaml"))
+#CHANNELID = config['thingspeak']['CHANNELID']
+KEY = config['thingspeak']['KEY']
 
 
 def load_labels(path):
@@ -92,21 +91,12 @@ def detect_objects(interpreter, image, threshold):
   return results
 
 
+lbl = []
 def annotate_objects(results, labels):
-  """Draws the bounding box and label for each object in the results."""
+  """Returns labels and scores for an inference"""
   for obj in results:
-    # Convert the bounding box figures from relative coordinates
-    # to absolute coordinates based on the original resolution
-    ymin, xmin, ymax, xmax = obj['bounding_box']
-    xmin = int(xmin * CAMERA_WIDTH)
-    xmax = int(xmax * CAMERA_WIDTH)
-    ymin = int(ymin * CAMERA_HEIGHT)
-    ymax = int(ymax * CAMERA_HEIGHT)
-
-    # Overlay the box, label, and score on the camera preview
-    #annotatorbounding_box([xmin, ymin, xmax, ymax])
-    #annotator.text([xmin, ymin],
-    print('%s %.2f' % (labels[obj['class_id']], obj['score']))
+    lbl.append([labels[obj['class_id']], obj['score']])
+  return lbl
 
 def requests_retry_session(
     retries=3,
@@ -152,54 +142,48 @@ def main():
   interpreter.allocate_tensors()
   _, input_height, input_width, _ = interpreter.get_input_details()[0]['shape']
 
-  print("input_height: {}".format(input_height))
-  print("input_width: {}".format(input_width))
-
   with Image.open(args.image).convert('RGB').resize((input_width, input_height), Image.ANTIALIAS) as f:
       results = detect_objects(interpreter, f, args.threshold)
-       # print(results)
-       # annotator.clear()
-      annotate_objects(results, labels)
-       # annotator.text([5, 0])
-       #  annotator.update()
-      detect = [category_index.get(value) for index,value in enumerate(classes[0]) if scores[0,index] > 0.90]
-       # print detect
+      detect = annotate_objects(results, labels)
+      print(type(detect))
+      print(detect)
 
       bicycle = 0
       person = 0
       horse = 0
+      car = 0
 
       for d in detect:
-          if d['name'] == 'bicycle':
+          if d[0] == 'bicycle':
               bicycle += 1
-          if d['name'] == 'person':
+          if d[0] == 'person':
               person += 1
-          if d['name'] == 'horse':
+          if d[0] == 'horse':
               horse += 1
+          if d[0] == 'car':
+              car += 1
 
 
-       main_url = 'https://api.thingspeak.com/update?api_key=' + KEY
-       channel_id = CHANNELID
-       date = str(datetime.datetime.now())
-       payload = dict(field1=date, field3=bicycle, field4=person, field5=horse)
+      main_url = 'https://api.thingspeak.com/update?api_key=' + KEY
+      date = str(datetime.datetime.now())
+      payload = dict(field1=date, field3=bicycle, field4=person, field5=horse, field6=car)
 
-       r = requests_retry_session().post(main_url, params=payload)
+      for attempt in range (10):
+          try:
+              r = requests.post(main_url, params=payload)
+              print(r)
+              print(r.url)
+              # print 'payload sent'
+          except requests.exceptions.ConnectionError:
+              # print 'Connection Error'
+              pass
+          else:
+              break
 
-       # for attempt in range (10):
-       #     try:
-       #         r = requests.post(main_url, params=payload)
-       #         # print r.url
-       #         # print 'payload sent'
-       #     except requests.exceptions.ConnectionError:
-       #         # print 'Connection Error'
-       #         pass
-       #     else:
-       #         break
-
-       # print 'bicycle =', (bicycle)
-       # print 'person =', (person)
-       # print 'horse =', (horse)
-
+      print('bicycle ={}'.format(bicycle))
+      print('person ={}'.format(person))
+      print('horse ={}'.format(horse))
+      print('car ={}'.format(car))
 
 if __name__ == '__main__':
   main()
