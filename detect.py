@@ -102,19 +102,19 @@ def main():
   parser = argparse.ArgumentParser(
       formatter_class=argparse.ArgumentDefaultsHelpFormatter)
   parser.add_argument(
-      '--model', help='File path of .tflite file.', required=True)
+      '--model', help='File path of .tflite file.', required=False, default='detect.tflite')
   parser.add_argument(
-      '--labels', help='File path of labels file.', required=True)
+      '--labels', help='File path of labels file.', required=False, default='coco_labels.txt')
   parser.add_argument(
       '--threshold',
       help='Score threshold for detected objects.',
       required=False,
       type=float,
-      default=0.4)
+      default=0.55)
   parser.add_argument(
       '--image',
       help='Path to image. Eg. /path/to/image/imageName.jpg',
-      required=True)
+      required=False, default='/home/pi/Public/images/counter_image.jpg')
   args = parser.parse_args()
 
   labels = load_labels(args.labels)
@@ -151,8 +151,8 @@ def main():
       for attempt in range (10):
           try:
               r = requests.post(main_url, params=payload)
-              print(r)
-              print(r.url)
+              # print(r)
+              # print(r.url)
               # print 'payload sent'
           except requests.exceptions.ConnectionError:
               # print 'Connection Error'
@@ -160,10 +160,10 @@ def main():
           else:
               break
 
-      print('bicycle ={}'.format(bicycle))
-      print('person ={}'.format(person))
-      print('horse ={}'.format(horse))
-      print('car ={}'.format(car))
+      # print('bicycle ={}'.format(bicycle))
+      # print('person ={}'.format(person))
+      # print('horse ={}'.format(horse))
+      # print('car ={}'.format(car))
 
 if __name__ == '__main__':
   main()
