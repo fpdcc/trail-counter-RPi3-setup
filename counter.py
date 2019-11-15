@@ -1,3 +1,4 @@
+import os
 import RPi.GPIO as io
 import time
 from picamera import PiCamera
@@ -18,11 +19,11 @@ def motion(pir_pin):
     # print("Motion!")
     filename = 'counter_image.jpg'
     piclocation = '/home/pi/Public/images/'+ filename
-    time.sleep(1)
+    # time.sleep(1)
     # camera.start_preview()
     # time.sleep(2)
     camera.capture(piclocation)
-    time.sleep(1)
+    # time.sleep(1)
     # camera.stop_preview()
 
 
@@ -35,9 +36,10 @@ while True:
         # print ("rpi-ms-camera: Waiting for motion.")
         io.wait_for_edge(pir_pin, io.RISING)
         motion(pir_pin)
-        time.sleep(2)
+        # time.sleep(1)
 	# print("executing object detection")
-	execfile("/home/pi/Public/trail-counter-RPi3-setup/detect.py")
+        # execfile("/home/pi/Public/trail-counter-RPi3-setup/detect.py")
+        os.system('python3 /home/pi/Public/trail-counter-RPi3-setup/detect.py')
         # print ("rpi-ms-camera: Sleeping")
         # time.sleep(1)
     except KeyboardInterrupt:
