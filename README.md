@@ -137,6 +137,15 @@ Each time the counter detect an object it printed the URL to the log file. This 
 
 Then choose an option depending on your preference.
 
+### To turn off bluetooth and wifi
+
+`nano /boot/config.txt`
+
+add lines
+
+dtoverlay=pi3-disable-bt
+dtoverlay=pi3-disable-wifi
+
 ---
 
 # This section is not part of the set up for the Raspberry Pi
