@@ -1,4 +1,7 @@
-R Pi 3 set up help for trail counter.
+# R Pi 3 set up help for trail counter.
+
+![Raspberry Pi trail counter](https://raw.githubusercontent.com/fpdcc/trail-counter-RPi3-setup/master/img/trail_counter55.jpg)
+
 
 # Items needed for counter:
 * Raspberry Pi (We've tested this on model 3B+ - with headers)
@@ -60,7 +63,7 @@ select
    > Camera
      > YES
 
-Connect Raspberry Pi Camera Rev 1.3 
+Connect Raspberry Pi Camera Rev 1.3
  1.Ribbon cable from camera goes into slot labeled camera on pi.
 
 Plug in Huawei E303 3G Wireless into USB port
