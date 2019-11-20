@@ -3,7 +3,7 @@
 ![Raspberry Pi trail counter](https://raw.githubusercontent.com/fpdcc/trail-counter-RPi3-setup/master/img/trail_counter55.jpg)
 
 
-# Items needed for counter:
+## Items needed for counter:
 * Raspberry Pi (We've tested this on model 3B+ - with headers)
 * SD with Raspian Buster installed
 * PIR sensor
@@ -18,6 +18,7 @@ Other things to help development or in constructing the sensor - these are not n
 * Bread board
 * 12in camera cable
 * female to female wires
+* case/container to keep trail counter in
 
 #### ThingSpeak Account
 
@@ -32,7 +33,7 @@ Once you sign upfor an account, create a channel. Select your channel and add fi
 
 Then Click on API Keys and Generate New Write API Key, copy key and save for step 3.
 
-# Trail Counter
+## Trail Counter
 
 ### Step 1
 
