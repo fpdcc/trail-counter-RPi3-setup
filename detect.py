@@ -26,19 +26,19 @@ import io
 import re
 import time
 import datetime
-import yaml
 import requests
 import numpy as np
 from PIL import Image
 from tflite_runtime.interpreter import Interpreter
+import os
+
+from config import config_dict
 
 CAMERA_WIDTH = 640
 CAMERA_HEIGHT = 480
 
-config = yaml.safe_load(open("/home/pi/Public/trail-counter-RPi3-setup/config.yaml"))
-#CHANNELID = config['thingspeak']['CHANNELID']
-KEY = config['thingspeak']['KEY']
-
+#CHANNELID = config_dict['CHANNELID']
+KEY = config_dict['KEY']
 
 def load_labels(path):
     """Loads the labels file. Supports files with or without index numbers."""
@@ -102,9 +102,9 @@ def main():
     parser = argparse.ArgumentParser(
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument(
-        '--model', help='File path of .tflite file.', required=False, default='detect.tflite')
+        '--model', help='File path of .tflite file.', required=False, default='/home/pi/Public/trail-counter-RPi3-setup/detect.tflite')
     parser.add_argument(
-        '--labels', help='File path of labels file.', required=False, default='coco_labels.txt')
+        '--labels', help='File path of labels file.', required=False, default='/home/pi/Public/trail-counter-RPi3-setup/coco_labels.txt')
     parser.add_argument(
         '--threshold',
         help='Score threshold for detected objects.',
@@ -125,8 +125,6 @@ def main():
     with Image.open(args.image).convert('RGB').resize((input_width, input_height), Image.ANTIALIAS) as f:
         results = detect_objects(interpreter, f, args.threshold)
         detect = annotate_objects(results, labels)
-        # print(type(detect))
-        # print(detect)
 
         bicycle = 0
         person = 0
@@ -151,19 +149,11 @@ def main():
         for attempt in range (10):
             try:
                 r = requests.post(main_url, params=payload)
-                # print(r)
                 print(r.url)
-                # print 'payload sent'
             except requests.exceptions.ConnectionError:
-                # print 'Connection Error'
                 pass
             else:
                 break
-
-        # print('bicycle ={}'.format(bicycle))
-        # print('person ={}'.format(person))
-        # print('horse ={}'.format(horse))
-        # print('car ={}'.format(car))
 
 if __name__ == '__main__':
     main()
