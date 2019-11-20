@@ -7,7 +7,7 @@ R Pi 3 set up help for trail counter.
 * Pi Camera
 * Huawei E303 Cellualar USB dongle with Sim card (we got both from Hologram.io)
 * External Battery (Currently we are using a Ravpower 26800 mAh battery)
-* (ThingSpeak)[thingspeak.com] account and API key
+* [ThingSpeak](thingspeak.com) account and API key
 
 Other things to help development or in constructing the sensor - these are not neccessary
 * HDMI cable
@@ -15,6 +15,19 @@ Other things to help development or in constructing the sensor - these are not n
 * Bread board
 * 12in camera cable
 * female to female wires
+
+#### ThingSpeak Account
+
+Once you sign upfor an account, create a channel. Select your channel and add field names according to those found in the detect.py file.
+
+- Field 1 = current_date
+- Field 2 = last_date
+- Field 3 = bicycle
+- Field 4 = person
+- Field 5 = horse
+- Field 6 = car
+
+Then Click on API Keys and Generate New Write API Key, copy key and save for step 3.
 
 # Trail Counter
 
@@ -28,20 +41,7 @@ Then
 git clone https://github.com/fpdcc/trail-counter-RPi3-setup.git
 cd trail-counter-RPi3-setup
 ./rasp_pi_installs.sh
-```bash
-
-### ThingSpeak Account
-
-Once you sign upfor an account, create a channel. Select your channel and add field names according to those found in the detect.py file.
-
-Field 1 = current_date
-Field 2 = last_date
-Field 3 = bicycle
-Field 4 = person
-Field 5 = horse
-Field 6 = car
-
-Then Click on API Keys and Generate New Write API Key, copy key and save for step 3.
+```
 
 ### Step 2
 
@@ -143,8 +143,10 @@ Then choose an option depending on your preference.
 
 add lines
 
+```
 dtoverlay=pi3-disable-bt
 dtoverlay=pi3-disable-wifi
+```
 
 ---
 
